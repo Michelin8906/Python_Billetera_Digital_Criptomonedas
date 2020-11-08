@@ -10,7 +10,7 @@ import requests
 import json
 import datetime
 
-#Comentario desarrollo_2 Vs1
+#Comentario desarrollo_3 Vs1
 class Product:
     db_name = 'Next_U.db'
     _ENDPOINT = "https://api.binance.com"
