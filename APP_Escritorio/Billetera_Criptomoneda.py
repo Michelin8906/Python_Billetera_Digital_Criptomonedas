@@ -4,6 +4,7 @@ from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
 from tkinter import ttk
 from tkinter import *
 from tkinter.messagebox import *
+import pymysql
 
 import sqlite3
 import requests
@@ -44,9 +45,8 @@ class Product:
 
     def Iniciar_sesion(self):
         if self.validation():
-            query = "Select * From Usuario Where Usuario = ? and Contraseña = ?"
-            parameters = (self.name.get(), self.passw.get())
-            result = self.run_query(query, parameters)
+            query = "Select * From Usuario Where Usuario = '{}' and Contraseña = '{}'".format(self.name.get(), self.passw.get())            
+            result = self.run_query(query)
             I = 0
             for row  in result:
                 I = 1
@@ -91,8 +91,8 @@ class Product:
                 Label(self.frame2, text = 'Usuario: ').grid(row = 4, column = 1)
                 self.Usuario = ttk.Combobox(self.frame2, state = 'readonly')
                 self.Usuario.grid(row = 4, column = 2)
-                query = "Select Usuario FROM Usuario Where Usuario <> ? ORDER BY Usuario ASC"
-                result = self.run_query(query, (self.usu, ))
+                query = "Select Usuario FROM Usuario Where Usuario <> '{}' ORDER BY Usuario ASC".format(self.usu)
+                result = self.run_query(query)
                 cache = list()
                 for row  in result:
                     cache.append(row)
@@ -155,9 +155,8 @@ class Product:
         if self.validation2():
             new_name = self.Cripto.get()
             new_usuario = self.Usuario.get()
-            query = 'SELECT Cant FROM Criptomonedas WHERE Name_Crip = ? and Cod_Usu = ?'
-            parameters = (new_name, self.usu)
-            db_rows = self.run_query(query, parameters)
+            query = "SELECT Cant FROM Criptomonedas WHERE Name_Crip = '{}' and Cod_Usu = '{}'".format(new_name, self.usu)
+            db_rows = self.run_query(query)
             Canti = 0
             for row in db_rows:
                 Canti = row[0]
@@ -169,39 +168,33 @@ class Product:
                 else:
                     new_cantidad = Canti - Cantidad2
                     FechaAct = datetime.datetime.now()
-                    query = 'UPDATE Criptomonedas SET Cant = ?, Date = ? WHERE Name_Crip = ? AND Cod_Usu = ?'
-                    parameters = (new_cantidad, FechaAct, new_name, self.usu)
-                    self.run_query(query, parameters)
+                    query = "UPDATE Criptomonedas SET Cant = {}, Date = '{}' WHERE Name_Crip = '{}' AND Cod_Usu = '{}'".format(new_cantidad, FechaAct, new_name, self.usu)
+                    self.run_query(query)
                     showinfo(title = "Información", message = "Se a descontado la cantidad enviada de tu saldo")
                     
-                    query = 'SELECT Cant FROM Criptomonedas WHERE Name_Crip = ? and Cod_Usu = ?'
-                    parameters = (new_name, new_usuario)
-                    db_rows = self.run_query(query, parameters)
+                    query = "SELECT Cant FROM Criptomonedas WHERE Name_Crip = '{}' and Cod_Usu = '{}'".format(new_name, new_usuario)
+                    db_rows = self.run_query(query)
                     Canti = 0
                     for row in db_rows:
                         Canti = row[0]
                     
                     if Canti == 0:
                         FechaAct = datetime.datetime.now()
-                        query = "INSERT INTO Criptomonedas VALUES (?,?,?,?)"
-                        parameters = (new_name, Cantidad2, new_usuario, FechaAct)
-                        self.run_query(query, parameters)
+                        query = "INSERT INTO Criptomonedas VALUES ('{}',{},'{}','{}')".format(new_name, Cantidad2, new_usuario, FechaAc)
+                        self.run_query(query)
 
-                        query = "INSERT INTO Historial VALUES (?,?,?,?,?)"
-                        parameters = (self.usu, new_usuario, Cantidad2, new_name, FechaAct)
-                        self.run_query(query, parameters)
+                        query = "INSERT INTO Historial VALUES ('{}','{}',{},'{}','{}')".format(self.usu, new_usuario, Cantidad2, new_name, FechaAct)
+                        self.run_query(query)
 
                         showinfo(title = "Información", message = "Se a creado un N registro en Cripto e Historial")
                     else:
                         new_cantidad = Canti + Cantidad2
                         FechaAct = datetime.datetime.now()
-                        query = 'UPDATE Criptomonedas SET Cant = ?, Date = ?  WHERE Name_Crip = ? AND Cod_Usu = ?'
-                        parameters = (new_cantidad, FechaAct, new_name, new_usuario)
-                        self.run_query(query, parameters)
+                        query = "UPDATE Criptomonedas SET Cant = {}, Date = '{}'  WHERE Name_Crip = '{}' AND Cod_Usu = '{}'".format(new_cantidad, FechaAct, new_name, new_usuario)
+                        self.run_query(query)
 
-                        query = "INSERT INTO Historial VALUES (?,?,?,?,?)"
-                        parameters = (self.usu, new_usuario, Cantidad2, new_name, FechaAct)
-                        self.run_query(query, parameters)
+                        query = "INSERT INTO Historial VALUES ('{}','{}',{},'{}','{}')".format(self.usu, new_usuario, Cantidad2, new_name, FechaAct)
+                        self.run_query(query)
 
                         showinfo(title = "Información", message = "Se a modificado el registro en Cripto e Historial")
                         self.get_Monedas()
@@ -212,9 +205,8 @@ class Product:
             
     def Ver_Historial(self):
         new_name = self.Cripto2.get()
-        query = 'SELECT Cantidad FROM Historial WHERE (Nombre_Envia = ? or Nombre_Recibe = ?) and Nombre_Cripto = ?'
-        parameters = (self.usu, self.usu, new_name)
-        db_rows = self.run_query(query, parameters)
+        query = "SELECT Cantidad FROM Historial WHERE (Nombre_Envia = '{}' or Nombre_Recibe = '{}') and Nombre_Cripto = '{}'".format(self.usu, self.usu, new_name)
+        db_rows = self.run_query(query)
         Canti = 0
         for row in db_rows:
             Canti = row[0]
@@ -252,8 +244,8 @@ class Product:
             self.tree.delete(element)
             
         #realizamos la consulta
-        query = 'SELECT Name_Crip, Cant, Date FROM Criptomonedas WHERE Cod_Usu = ?'
-        db_rows = self.run_query(query, (self.usu,))
+        query = "SELECT Name_Crip, Cant, Date FROM Criptomonedas WHERE Cod_Usu = '{}'".format(self.usu)
+        db_rows = self.run_query(query)
         #mostramos la consulta
         for row in db_rows:
             moneda = row[0]
@@ -270,20 +262,27 @@ class Product:
             
         #realizamos la consulta
         new_name = self.Cripto2.get()
-        query = 'SELECT * FROM Historial WHERE (Nombre_Envia = ? or Nombre_Recibe = ?) and Nombre_Cripto = ?'
-        parameters = (self.usu, self.usu, new_name)
-        db_rows = self.run_query(query, parameters)
+        query = "SELECT * FROM Historial WHERE (Nombre_Envia = '{}' or Nombre_Recibe = '{}') and Nombre_Cripto = '{}'".format(self.usu, self.usu, new_name)
+        db_rows = self.run_query(query)
         #mostramos la consulta
         for row in db_rows:
             print(row)
             self.tree2.insert("", 0, text = row[0], value = (row[1], row[2], row[3], row[4]))
     
-    def run_query(self, query, parameters = ()):
-        with sqlite3.connect(self.db_name) as conn:
-            cursor = conn.cursor()
-            result = cursor.execute(query, parameters)
-            conn.commit()
+    def run_query(self, query):
+        self.connection = pymysql.connect(
+            host='localhost', #ip
+            user='root',
+            password='',
+            db='cripto'
+        )
+        self.cursor = self.connection.cursor()
+        self.cursor.execute(query)
+        result = self.cursor.fetchall()
+
+        self.connection.commit()
         return result
+        
 
     def url(self, API):
         return self._ENDPOINT+API
