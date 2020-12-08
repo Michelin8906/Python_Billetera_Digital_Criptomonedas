@@ -15,9 +15,9 @@ I = 0
 class Database:
     def __init__(self):
         self.connection = pymysql.connect(
-            host='localhost', #ip
+            host='dbserver', #ip
             user='root',
-            password='',
+            password='mysqlpw',
             db='cripto'
         )
         self.cursor = self.connection.cursor()
@@ -45,5 +45,5 @@ class Database:
         self.connection.commit()
         return result
 
-#database = Database()
+database = Database()
 database.consulta()
