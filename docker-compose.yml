@@ -1,0 +1,21 @@
+version: '3.7'
+services:
+    dbserver:
+        image: mysql:5.7.32
+        container_name: dbserver
+        environment: 
+            MYSQL_ROOT_PASSWORD: mysqlpw
+        volumes:
+            - ./bd:/docker-entrypoint-initdb.d/:ro
+        ports:
+            - 3306:3306
+    jenkins:
+        image: jenkins/jenkins
+        ports:
+            - 8080:8080
+            - 50000:50000
+        container_name: jenkins
+        networks:
+            - net
+networks:
+    net:
