@@ -2,8 +2,8 @@ FROM python:3.7.9
 WORKDIR /user/src/app
 COPY . .
 RUN apt-get -y update
-RUN apt-get -y install python3
-#RUN apt-get -y install python3-pip
+#RUN apt-get -y install python3
+RUN apt-get -y install python3-pip
 #RUN apt-get install python3-tk
 RUN pip3 install PyMySQL
 RUN pip3 install requests

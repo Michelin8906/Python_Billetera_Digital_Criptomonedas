@@ -1,0 +1,12 @@
+primeor se debe desactivar la seguridad del host con el sigueinte comando
+
+Sudo xhost +
+
+Nota: sudo se debe utilizar si tiene un usuario diferente a root, te puede pedir calve si es por primera vez que lo utiliza
+
+Luego de esto se debe realizar el siguiente comando para lazar el contenedor con la aplicacion
+
+
+sudo docker run -d --name app_v1 -e DISPLAY:$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix python:proyecto
+
+nota:python:proyecto es el nombre de la imagen anteriormente creada con el dockerfile
