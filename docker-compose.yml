@@ -9,7 +9,7 @@ services:
             - ./bd/init.sql:/docker-entrypoint-initdb.d/init.sql
         ports:
             - 3306:3306
-        network:
+        networks:
             - net
     jenkins:
         image: jenkins/jenkins
@@ -19,7 +19,7 @@ services:
         container_name: jenkins
         networks:
             - net
-    Python:
+    python:
         container_name: app
         build: ./app
         environment:
