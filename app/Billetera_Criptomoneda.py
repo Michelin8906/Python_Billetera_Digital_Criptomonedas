@@ -45,7 +45,7 @@ class Product:
 
     def Iniciar_sesion(self):
         if self.validation():
-            query = "Select * From Usuario Where Usuario = '{}' and Contraseña = '{}'".format(self.name.get(), self.passw.get())            
+            query = "Select * From usuario Where Usuario = '{}' and Contrasea = '{}'".format(self.name.get(), self.passw.get())            
             result = self.run_query(query)
             I = 0
             for row  in result:
@@ -271,7 +271,7 @@ class Product:
     
     def run_query(self, query):
         self.connection = pymysql.connect(
-            host='dbserver', #ip
+            host='172.22.0.4', #ip
             user='root',
             password='mysqlpw',
             db='cripto'

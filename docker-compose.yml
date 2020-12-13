@@ -19,7 +19,7 @@ services:
         container_name: jenkins
         networks:
             - net
-    python:
+    app_v1:
         container_name: app
         build: ./app
         environment:
@@ -28,5 +28,7 @@ services:
             - /tmp/.X11-unix:/tmp/.X11-unix
         networks:
             - net
+        depends_on:
+            - dbserver
 networks:
     net:
