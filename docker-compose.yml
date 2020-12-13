@@ -6,15 +6,26 @@ services:
         environment: 
             MYSQL_ROOT_PASSWORD: mysqlpw
         volumes:
-            - ./bd:/docker-entrypoint-initdb.d/:ro
+            - ./bd/init.sql:/docker-entrypoint-initdb.d/init.sql
         ports:
             - 3306:3306
+        network:
+            - net
     jenkins:
         image: jenkins/jenkins
         ports:
             - 8080:8080
             - 50000:50000
         container_name: jenkins
+        networks:
+            - net
+    Python:
+        container_name: app
+        build: ./app
+        environment:
+            DISPLAY: :0
+        volumes: 
+            - /tmp/.X11-unix:/tmp/.X11-unix
         networks:
             - net
 networks:
