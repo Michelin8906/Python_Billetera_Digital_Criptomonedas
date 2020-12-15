@@ -21,6 +21,8 @@ SET time_zone = "+00:00";
 -- Base de datos: `cripto`
 --
 
+CREATE DATABASE cripto;
+ALTER DATABASE cripto CHARACTER SET utf8 COLLATE utf8_spanish_ci
 -- --------------------------------------------------------
 
 --
