@@ -1,0 +1,35 @@
+job('job_criptomoneda') {
+	description('Job que consulta el repositorio de git y despues de un tiempo compila y ejecuta')
+  scm {
+    git('https://github.com/Michelin8906/Python_Billetera_Digital_Criptomonedas', 'master') { node ->
+      node / gitConfigName('guramirez8')
+      node / gitConfigEmail('guramirez8@poligran.edu.co')
+    }
+  } 
+  triggers {
+    cron('H/7 * * * *')
+  }
+  steps {
+    shell("docker-compose up -d")
+  }
+  publishers {
+    mailer('guramirez8@poligran.edu.co', true, true)
+    slackNotifier {
+      notifyAborted(true)
+      notifyEveryFailure(true)
+      notifyNotBuilt(false)
+      notifyUnstable(false)
+      notifyBackToNormal(true)
+      notifySuccess(false)
+      notifyRepeatedFailure(false)
+      startNotification(false)
+      includeTestSummary(false)
+      includeCustomMessage(false)
+      customMessage(null)
+      sendAs(null)
+      commitInfoChoice('NONE')
+      teamDomain(null)
+      authToken(null)
+    }
+  }
+}

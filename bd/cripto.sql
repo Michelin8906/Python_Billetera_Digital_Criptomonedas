@@ -29,8 +29,7 @@ ALTER DATABASE cripto CHARACTER SET utf8 COLLATE utf8_spanish_ci
 -- Estructura de tabla para la tabla `code_cripto`
 --
 
-DROP TABLE IF EXISTS `code_cripto`;
-CREATE TABLE IF NOT EXISTS `code_cripto` (
+docCREATE TABLE `code_cripto` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Code` text NOT NULL,
   PRIMARY KEY (`Id`)
