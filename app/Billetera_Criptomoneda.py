@@ -271,7 +271,7 @@ class Product:
     
     def run_query(self, query):
         self.connection = pymysql.connect(
-            host='172.22.0.4', #ip
+            host='dbserver', #ip
             user='root',
             password='mysqlpw',
             db='cripto'
